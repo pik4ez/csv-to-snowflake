@@ -2,6 +2,7 @@ import argparse
 import csv
 import logging
 import ntpath
+import re
 from pathlib import Path
 
 import snowflake.connector
@@ -52,6 +53,7 @@ def run():
             lineterminator=args.csv_lineterminator)
         reader = csv.DictReader(csv_file, dialect='dialect')
         columns = reader.fieldnames
+        logger.debug("columns", columns)
 
         ctx = snowflake.connector.connect(
             user=args.user,
@@ -70,7 +72,7 @@ def run():
             logger.debug(sql_use_schema)
             cs.execute(sql_use_schema)
 
-            column_defs = [f"{x} text" for x in columns]
+            column_defs = [f"{escape_column_name(x)} text" for x in columns]
             sql_create_table = f"CREATE TABLE IF NOT EXISTS {args.table}({', '.join(column_defs)})"
             logger.debug(sql_create_table)
             cs.execute(sql_create_table)
@@ -118,3 +120,10 @@ def run():
             logger.error("Failed to upload CSV:", err)
         finally:
             cs.close()
+
+
+def escape_column_name(s: str) -> str:
+    s = s.replace(' ', '_')
+    s = s.lower()
+    s = re.sub('[^a-zA-Z0-9_\$]', '', s)
+    return s

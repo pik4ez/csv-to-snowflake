@@ -21,3 +21,9 @@ By default, the tool accepts "excel"-formatted CSV files:
 * Lines delimited by '\r\n'.
 
 You may change those using `--csv-delimiter` and `--csv-lineterminator` flags.
+
+## Debug
+
+To get the most verbose debug output, you may set `--log-level debug`.
+
+To run in debug mode, which may perform some additional checks just for debug purposes, set the flag `--debug true`.

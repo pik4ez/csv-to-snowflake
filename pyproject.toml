@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "csv-to-snowflake"
-version = "0.1.0"
+version = "0.2.1"
 description = "Creates a table in Snowflake based on CSV file"
 authors = ["Dmitry Belov <pik4ez@gmail.com>"]
 
